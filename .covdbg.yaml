@@ -1,5 +1,6 @@
 # MSVC coverage for ci-build.yml: the sources OpenCppCoverage measured (examples/, src/, tools/),
 # without the broker test hook's private copy of the broker.
+---
 version: 1
 source_root: "."
 coverage:

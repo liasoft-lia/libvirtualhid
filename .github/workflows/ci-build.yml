@@ -228,7 +228,9 @@ jobs:
       # GitHub issues no OIDC token to pull requests from forks, so MSVC coverage is measured on
       # pushes and on pull requests from branches of this repository; fork pull requests run the tests only.
       - name: Setup covdbg
-        if: matrix.kind == 'msvc' && (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
+        if: >-
+          matrix.kind == 'msvc' &&
+          (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository)
         uses: liasoft/setup-covdbg@6116a52a8ce697108056ce4b4cd2429424a231b1  # v1.0.0
         with:
           version: 'latest'
@@ -427,11 +429,16 @@ jobs:
         id: test_msvc
         if: matrix.kind == 'msvc'
         env:
-          MEASURE_COVERAGE: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository }}
+          MEASURE_COVERAGE: >-
+            ${{ github.event_name != 'pull_request' ||
+            github.event.pull_request.head.repo.full_name == github.repository }}
         working-directory: cmake-build-ci/tests
         run: |
           $testExe = ".\$env:CMAKE_BUILD_CONFIG\test_libvirtualhid.exe"
-          $testArgs = @("--gtest_color=yes", "--gtest_output=xml:$env:GITHUB_WORKSPACE\cmake-build-ci\reports\junit.xml")
+          $testArgs = @(
+            "--gtest_color=yes",
+            "--gtest_output=xml:$env:GITHUB_WORKSPACE\cmake-build-ci\reports\junit.xml"
+          )
           if ($env:MEASURE_COVERAGE -ne 'true') {
             & $testExe @testArgs
             exit $LASTEXITCODE
