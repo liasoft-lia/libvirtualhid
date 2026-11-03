@@ -11,7 +11,7 @@ on:
 jobs:
   codecov:
     name: Codecov-${{ matrix.flag }}
-    if: startsWith(github.repository, 'LizardByte/')
+    if: startsWith(github.repository, 'LizardByte/') || github.repository == 'liasoft-lia/libvirtualhid'
     permissions:
       contents: read
     runs-on: ubuntu-latest
